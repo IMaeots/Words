@@ -7,6 +7,7 @@ import java.io.IOException;
 public class FileLoaderTest {
     @Test
     public void testFileLoader() throws IOException {
-        // Statistics.METHOD(VARIABLE);
+        FileLoader f = new FileLoader();
+        f.readFile("file.txt");
     }
 }
