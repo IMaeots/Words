@@ -1,31 +1,28 @@
 package com.imaeots.wordcounter.entities.shell;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
-import java.nio.file.Path;
-import java.nio.file.Files;
 
 public class FileLoader {
+    private String filePath;
 
-    /**
-     * Method to read all lines from the provided file.
-     * @param fileURL location of the file that will be readen
-     * @return List of text that was in the file
-     * @throws IOException incase provided file is incorrect
-     */
-    public List<String> readFile(String fileURL) throws IOException {
-        File f = new File(fileURL);
-        if (f.isFile() && f.canRead()) {
-            Path path = f.toPath();
-            return Files.readAllLines(path);
-        }
-        else {
-            throw new IOException("Can't read file " +  fileURL);
-        }
+    public FileLoader(String filePath) {
+        this.filePath = filePath;
     }
 
-    public List<String> readFile(Path path) throws IOException {
-            return Files.readAllLines(path);
+    public String loadData() throws IOException {
+        StringBuilder sb = new StringBuilder();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+            }
+        }
+
+        return sb.toString();
     }
+
 }

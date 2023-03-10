@@ -1,15 +1,37 @@
 package com.imaeots.wordcounter.entities.shell;
 
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Statistics {
-    
-    /**
-     * Method that prints out different statistics to the terminal about the provided file.
-     * @param text - a List of strings aka text that will be examinated to provide stats
-     */
-    public void showStats(List<String> text) {
-        System.out.println(text);
+    private String filePath;
+    private int numLines;
+    private int numWords;
+    private int numChars;
+
+    public Statistics(String filePath) {
+        this.filePath = filePath;
     }
 
+    public void calculate() throws IOException {
+        numLines = 0;
+        numWords = 0;
+        numChars = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                numLines++;
+                numWords += line.split("\\s+").length;
+                numChars += line.length();
+            }
+        }
+    }
+
+    public void printStatistics() {
+        System.out.println("Number of lines: " + numLines);
+        System.out.println("Number of words: " + numWords);
+        System.out.println("Number of characters: " + numChars);
+    }
 }

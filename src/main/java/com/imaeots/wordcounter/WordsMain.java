@@ -1,14 +1,39 @@
 package com.imaeots.wordcounter;
 
+import com.imaeots.wordcounter.entities.shell.DragAndDropFileFrame;
 import com.imaeots.wordcounter.entities.shell.FileLoader;
-import com.imaeots.wordcounter.entities.shell.Statistics;
+//import com.imaeots.wordcounter.entities.shell.Statistics;
+
 import java.io.IOException;
-import java.util.List;
+import javax.swing.JFrame;
 
 public class WordsMain {
-    public static void main(String[] args) throws IOException {
-        System.out.println("hi");
-        // checking for valid terminal input
+    public static void main(String[] args) {
+        
+        // Making the main frame 
+        DragAndDropFileFrame frame = new DragAndDropFileFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300,300);
+        frame.setVisible(true);
+
+        boolean input = false;
+        // File located
+        while (!input) {
+            // Loading the file and it's data
+            if (frame.isReady) {
+                FileLoader loader = new FileLoader(frame.filePath);
+                try {
+                    String data = loader.loadData();
+                    input = true;
+                    System.out.println(data);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    input = true;
+                }
+            }
+            else continue;
+        
+        /* // checking for valid input
         if (args != null && args.length == 1) {
             String path = args[0];
 
@@ -22,8 +47,9 @@ public class WordsMain {
         }
         else {
             // Output error message
-            System.out.println("Invalid file path parameter.");
+            System.out.println("Invalid file.");
         }
+        */
 
     }
 }
