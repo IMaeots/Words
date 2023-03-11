@@ -1,32 +1,32 @@
 package com.imaeots.wordcounter.entities.shell;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 public class Statistics {
-    private String filePath;
+    private String data;
     private int numLines;
     private int numWords;
     private int numChars;
 
-    public Statistics(String filePath) {
-        this.filePath = filePath;
+    public Statistics(StringBuilder input) {
+        data = input.toString();
     }
 
-    public void calculate() throws IOException {
+    public void calculate() {
         numLines = 0;
         numWords = 0;
         numChars = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                numLines++;
-                numWords += line.split("\\s+").length;
-                numChars += line.length();
+        char[] charArray = data.toCharArray();
+    
+        for (char c : charArray) {
+            numChars += 1;
+            if (c == ' ') {
+                numWords += 1;
+            }
+            if (c == '\n') {
+                numLines += 1;
             }
         }
+
     }
 
     public void printStatistics() {
@@ -34,4 +34,5 @@ public class Statistics {
         System.out.println("Number of words: " + numWords);
         System.out.println("Number of characters: " + numChars);
     }
+
 }
