@@ -1,29 +1,31 @@
 package com.imaeots.wordcounter;
 
-import com.imaeots.wordcounter.entities.shell.FileLoader;
+import com.imaeots.wordcounter.entities.shell.DragAndDropFileFrame;
 import com.imaeots.wordcounter.entities.shell.Statistics;
-import java.io.IOException;
-import java.util.List;
 
 public class WordsMain {
-    public static void main(String[] args) throws IOException {
-        System.out.println("hi");
-        // checking for valid terminal input
-        if (args != null && args.length == 1) {
-            String path = args[0];
+    public static void main(String[] args) {
+        
+        // Making the main frame
+        DragAndDropFileFrame frame = new DragAndDropFileFrame();
 
-            // Opening the file and reading it
-            FileLoader file = new FileLoader();
-            List<String> text = file.readFile(path);
-            
-            // Getting statistics
-            Statistics stats = new Statistics();
-            stats.showStats(text);
+        // Loop until the user has dropped a file
+        while(!frame.isReady) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        else {
-            // Output error message
-            System.out.println("Invalid file path parameter.");
-        }
+
+        // Receive the data from the file
+        StringBuilder data = frame.getData();
+        System.out.println(data);
+
+        // Get the statistics of the data
+        Statistics stats = new Statistics(data);
+        stats.calculate();
+        stats.printStatistics();
 
     }
 }

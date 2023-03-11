@@ -1,15 +1,38 @@
 package com.imaeots.wordcounter.entities.shell;
 
-import java.util.List;
-
 public class Statistics {
+    private String data;
+    private int numLines;
+    private int numWords;
+    private int numChars;
+
+    public Statistics(StringBuilder input) {
+        data = input.toString();
+    }
+
+    public void calculate() {
+        numLines = 0;
+        numWords = 0;
+        numChars = 0;
+
+        char[] charArray = data.toCharArray();
     
-    /**
-     * Method that prints out different statistics to the terminal about the provided file.
-     * @param text - a List of strings aka text that will be examinated to provide stats
-     */
-    public void showStats(List<String> text) {
-        System.out.println(text);
+        for (char c : charArray) {
+            numChars += 1;
+            if (c == ' ') {
+                numWords += 1;
+            }
+            if (c == '\n') {
+                numLines += 1;
+            }
+        }
+
+    }
+
+    public void printStatistics() {
+        System.out.println("Number of lines: " + numLines);
+        System.out.println("Number of words: " + numWords);
+        System.out.println("Number of characters: " + numChars);
     }
 
 }
