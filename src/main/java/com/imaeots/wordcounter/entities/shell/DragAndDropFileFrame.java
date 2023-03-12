@@ -20,7 +20,7 @@ public class DragAndDropFileFrame extends JFrame {
     public StringBuilder data = new StringBuilder();
 
     public DragAndDropFileFrame() {
-        super("Words");
+        super("Words - Text file statistics");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300,300);
 
@@ -44,7 +44,7 @@ public class DragAndDropFileFrame extends JFrame {
                     // Get
                     Transferable transferable = event.getTransferable();
                     if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                        File file = ((java.util.List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor)).get(0);
+                        @SuppressWarnings("unchecked") File file = ((java.util.List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor)).get(0);
                         // Open and add file data
                         java.nio.file.Files.lines(file.toPath()).forEach(line -> data.append(line + "\n"));
                     }

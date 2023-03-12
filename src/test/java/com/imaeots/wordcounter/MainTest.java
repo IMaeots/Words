@@ -2,7 +2,7 @@ package com.imaeots.wordcounter;
 
 import org.junit.jupiter.api.Test;
 
-// This is for testing
+// This is for Main testing
 public class MainTest {
     @Test
     public void testWordsMain(){

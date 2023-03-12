@@ -20,12 +20,11 @@ public class WordsMain {
 
         // Receive the data from the file
         StringBuilder data = frame.getData();
-        System.out.println(data);
 
         // Get the statistics of the data
         Statistics stats = new Statistics(data);
         stats.calculate();
-        stats.printStatistics();
+        stats.displayStatistics(frame);
 
     }
 }
