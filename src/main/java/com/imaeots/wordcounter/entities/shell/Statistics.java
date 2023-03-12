@@ -1,14 +1,10 @@
 package com.imaeots.wordcounter.entities.shell;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.List;
 import java.awt.BorderLayout;
 
 public class Statistics extends JFrame {
