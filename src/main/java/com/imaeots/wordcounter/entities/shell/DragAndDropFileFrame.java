@@ -23,6 +23,7 @@ public class DragAndDropFileFrame extends JFrame {
         super("Words - Text file statistics");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(300,300);
+        setLocationRelativeTo(null);
 
         ImageIcon icon = new ImageIcon("src/resources/drag.png");
         ImageIcon scaledIcon = new ImageIcon(icon.getImage().getScaledInstance(200,200, Image.SCALE_SMOOTH));
