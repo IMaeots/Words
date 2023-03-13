@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.awt.BorderLayout;
+import java.lang.Math;
 
 public class Statistics extends JFrame {
     private String data;
@@ -21,8 +22,8 @@ public class Statistics extends JFrame {
     private int numSentence;
     private int numParagraph;
     private String mostCommonWord;
-    //private int avgWordLength;
-    //private String readingLevel;
+    private int maxCount;
+    private String readingLevel;
 
 
     public Statistics(StringBuilder input) {
@@ -75,6 +76,24 @@ public class Statistics extends JFrame {
             }
         }
 
+        // Reading level
+        // Using formula -> index = 0.0588 * L - 0.296 * S - 15.8
+        double L = (numChars / numWords * 100);
+        double S = (numSentence / numWords * 100);
+        double subindex = (0.0588 * L - 0.296 * S - 15.8);
+        long index = Math.round(subindex);
+
+        // Getting the grade
+        if (index >= 16) {
+            readingLevel = ("very high (16+).");
+        }
+        else if (index < 1) {
+            readingLevel = ("very low (<1).");
+        }
+        else {
+            readingLevel = String.format("%d.", index);
+        }
+
     }
 
     // Uses frame to make it stylistic for the stats.
@@ -84,7 +103,9 @@ public class Statistics extends JFrame {
          + "Number of characters: " + numChars + "\n"
          + "Number of sentences: " + numSentence + "\n"
          + "Number of paragraphs: " + numParagraph + "\n"
-         + "Most common word is: " + mostCommonWord);
+         + "Most common word is: " + mostCommonWord + "\n"
+         + "Most common word was used " + maxCount + " times."
+         + "The reading level of this text is " + readingLevel);
         frame.getContentPane().removeAll();
         frame.setLayout(new BorderLayout());
         frame.setTitle("Words - Stats of your file");
