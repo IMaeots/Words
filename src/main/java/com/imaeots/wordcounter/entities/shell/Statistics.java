@@ -18,11 +18,12 @@ public class Statistics extends JFrame {
     private String data;
     private int numLines;
     private int numWords;
+    private int numSyllables = 0;
     private int numChars;
     private int numSentence;
     private int numParagraph;
     private String mostCommonWord;
-    private int maxCount;
+    private int maxCount = 0;
     private String readingLevel;
 
 
@@ -32,7 +33,7 @@ public class Statistics extends JFrame {
 
     public void calculate() {
         // WordCount
-        String[] words = data.split("\\s+");
+        String[] words = data.toLowerCase().split("\\s+");
         numWords = words.length;
         // CharCount
         numChars = data.length();
@@ -45,6 +46,11 @@ public class Statistics extends JFrame {
         // ParagraphCount
         String[] paragraphs = data.split("\n\n");
         numParagraph = paragraphs.length;
+        // SyllableCount
+        for (String word : words) {
+            numSyllables += countSyllablesInWord(word);
+        }
+        
         // MostCommonWords
         Map<String, Integer> wordCountMap = new HashMap<>();
 
@@ -64,8 +70,6 @@ public class Statistics extends JFrame {
             mostCommonWords.put(wordList.get(i).getKey(), wordList.get(i).getValue());
         }
 
-        int maxCount = 0;
-
         for (Map.Entry<String, Integer> entry : mostCommonWords.entrySet()) {
             String word = entry.getKey();
             int count = entry.getValue();
@@ -77,41 +81,71 @@ public class Statistics extends JFrame {
         }
 
         // Reading level
-        // Using formula -> index = 0.0588 * L - 0.296 * S - 15.8
-        double L = (numChars / numWords * 100);
-        double S = (numSentence / numWords * 100);
-        double subindex = (0.0588 * L - 0.296 * S - 15.8);
+        // Using Flesch Reading Ease formula
+        // -> 206.835-1.015(total words/total sentences) - 84.6(total chars/total words)
+        double subindex = 206.835 - 1.015 * (numWords / numSentence) - 84.6 * (numSyllables / numWords);
         long index = Math.round(subindex);
+        // Getting the Score
+        if (index >= 90 && index <= 100) {
+            readingLevel = String.format("%d - Very easy", index);
+        } else if (index >= 80 && index < 90) {
+            readingLevel = String.format("%d - Easy", index);
+        } else if (index >= 70 && index < 80) {
+            readingLevel = String.format("%d - Fairly easy", index);
+        } else if (index >= 60 && index < 70) {
+            readingLevel = String.format("%d - Standard", index);
+        } else if (index >= 50 && index < 60) {
+            readingLevel = String.format("%d - Fairly difficult", index);
+        } else if (index >= 30 && index < 50) {
+            readingLevel = String.format("%d - Difficult", index);
+        } else if (index >= 0 && index < 30) {
+            readingLevel = String.format("%d - Very difficult", index);
+        } else {
+            readingLevel = String.format("Error 404");
+        }
+    }
 
-        // Getting the grade
-        if (index >= 16) {
-            readingLevel = ("very high (16+).");
+    // Syllable function
+    public static int countSyllablesInWord(String word) {
+        int count = 0;
+        boolean prevVowel = false;
+        for (int i = 0; i < word.length(); i++) {
+            char c = Character.toLowerCase(word.charAt(i));
+            boolean isVowel = (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y' || c == 'ä' || c == 'õ' || c == 'ö' || c == 'ü' );
+            if (isVowel && !prevVowel) {
+                count++;
+                prevVowel = true;
+            } else if (isVowel) {
+                prevVowel = true;
+            } else {
+                prevVowel = false;
+            }
         }
-        else if (index < 1) {
-            readingLevel = ("very low (<1).");
+        char lastChar = Character.toLowerCase(word.charAt(word.length() - 1));
+        if (lastChar == 'e') {
+            count--;
         }
-        else {
-            readingLevel = String.format("%d.", index);
-        }
-
+        return Math.max(count, 1);
     }
 
     // Uses frame to make it stylistic for the stats.
     public void displayStatistics(JFrame frame) {
-        String stats = ("Number of lines: " + numLines + "\n"
-         + "Number of words: " + numWords + "\n"
-         + "Number of characters: " + numChars + "\n"
+        String stats = ("Number of words: " + numWords + "\n"
+         + "Number of characters: " + numChars + "\n" 
+         + "Number of syllables: " + numSyllables + "\n"
          + "Number of sentences: " + numSentence + "\n"
+         + "Number of lines: " + numLines + "\n"
          + "Number of paragraphs: " + numParagraph + "\n"
-         + "Most common word is: " + mostCommonWord + "\n"
-         + "Most common word was used " + maxCount + " times."
-         + "The reading level of this text is " + readingLevel);
+         + "The most common word is: " + mostCommonWord + " (with " + Integer.toString(maxCount) + " uses)\n"
+         + "The reading level: " + readingLevel + "\n"
+         + "Reading level was determined with Flesch Reading Ease formula.\n"
+         + "Lower score indicates more proficiency. (0-100)");
         frame.getContentPane().removeAll();
         frame.setLayout(new BorderLayout());
         frame.setTitle("Words - Stats of your file");
 
         JTextArea textInput = new JTextArea(stats);
-        textInput.setFont(new Font("Arial", Font.PLAIN, 24));
+        textInput.setFont(new Font("Timesnewroman", Font.PLAIN, 24));
         Dimension size = textInput.getPreferredSize();
         size.width += 10;
         size.height += 5;
@@ -120,7 +154,6 @@ public class Statistics extends JFrame {
         frame.pack();
         frame.setLocationRelativeTo(frame);
         frame.setVisible(true);
-        System.out.println(stats);
     }
 
 }
