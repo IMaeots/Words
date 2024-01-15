@@ -25,6 +25,11 @@ This project was designed using Gradle with JDK 8+.
 - The logic for displaying an application Frame and reading data from the file sysitem is available in the **com.imaeots.wordcounter.entities.shell.DragAndDropFileFrame** class.
 - The logic for calculating the statistics is available in the **com.imaeots.wordcounter.entities.shell.Statistics** class.
 
-## Credits and license
-This is for use-only! Modifications are allowed only locally. If you wish to develop it further and publish it then contact as it is not allowed without doing so.
-# This was created by IMaeots
+## License
+Copyright 2023-... IMaeots
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+`http://www.apache.org/licenses/LICENSE-2.0`
